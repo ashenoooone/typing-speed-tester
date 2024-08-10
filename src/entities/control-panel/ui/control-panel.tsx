@@ -18,7 +18,10 @@ export const ControlPanel = React.memo((props: ControlPanelProps) => {
 
   return (
     <div
-      className={cn("bg-bg-modal px-4 py-2 rounded-xl flex gap-2", className)}
+      className={cn(
+        "bg-bg-modal px-4 py-2 rounded-xl justify-center items-center flex gap-2",
+        className
+      )}
     >
       {/* настройка модификаторов */}
       <ControlPanelModificators />
