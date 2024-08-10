@@ -20,12 +20,13 @@ export const ControlPanel = React.memo((props: ControlPanelProps) => {
     <div
       className={cn("bg-bg-modal px-4 py-2 rounded-xl flex gap-2", className)}
     >
-      {/* настройка сложности */}
+      {/* настройка модификаторов */}
       <ControlPanelModificators />
       <Separator orientation="vertical" />
       {/* меню управления режимом игры */}
       <ControlPanelGameMode />
       <Separator orientation="vertical" />
+      {/* настройка сложности */}
       <ControlPanelDifficulty />
     </div>
   );

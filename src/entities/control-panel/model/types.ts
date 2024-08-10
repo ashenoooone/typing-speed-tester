@@ -13,3 +13,8 @@ export type ControlPanelStoreType = {
   setTimePerGame: (newTime: TimePerGame) => void;
   setWordsPerGame: (newWords: WordsPerGame) => void;
 };
+
+export type GameSettingsType = Pick<
+  ControlPanelStoreType,
+  "modificators" | "currentGameMode" | "timePerGame" | "wordsPerGame"
+>;
