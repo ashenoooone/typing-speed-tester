@@ -7,6 +7,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
+        icon: "p-0 bg-none hover:opacity-80 transition",
         transparent_alternative:
           "text-text-tertiary hover:text-text-secondary normal-case",
         default:

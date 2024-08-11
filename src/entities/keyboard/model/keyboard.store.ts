@@ -11,8 +11,16 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
     userInput: [],
     currentWordIndex: 0,
     currentLetterIndex: 0,
+    startTime: null,
+    correctWords: 0,
+    wpm: 0,
+    gameEnd: false,
     checkLetter: (letter: string, wordIndex: number, letterIndex: number) => {
       set((state) => {
+        if (state.startTime === null) {
+          state.startTime = Date.now(); // Record start time on first key press
+        }
+
         if (state.text[wordIndex].length <= letterIndex) {
           state.text[wordIndex].push(letter);
           state.userInput[wordIndex].push("extra");
@@ -20,19 +28,38 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
         } else if (state.text[wordIndex][letterIndex] === letter) {
           state.userInput[wordIndex][letterIndex] = "valid";
           state.currentLetterIndex += 1;
+          // дополнительно вешаем проверку сюда, что если это
+          // последнее слово и все буквы введены, то игры завершается
+          if (
+            state.currentWordIndex === state.text.length - 1 &&
+            state.currentLetterIndex ===
+              state.text[state.currentWordIndex].length
+          ) {
+            state.gameEnd = true;
+          }
         } else if (state.text[wordIndex][letterIndex] !== letter) {
           state.userInput[wordIndex][letterIndex] = "invalid";
           state.currentLetterIndex += 1;
-        } else {
-          console.warn("keyboardStoreBase 21:46");
         }
       });
     },
+
     goToNextWord: () => {
       set((state) => {
+        const currentWord = state.userInput[state.currentWordIndex];
+        const isCorrect =
+          currentWord.every((letter) => letter === "valid") &&
+          currentWord.length === state.text[state.currentWordIndex].length;
+
+        if (isCorrect) {
+          state.correctWords += 1;
+        }
+
         if (state.currentWordIndex !== state.text.length - 1) {
           state.currentWordIndex += 1;
           state.currentLetterIndex = 0;
+        } else {
+          state.gameEnd = true;
         }
       });
     },
@@ -63,14 +90,35 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
           }
         }
       }),
+    calculateWPM: () => {
+      set((state) => {
+        if (state.startTime) {
+          // проверяем последнее число на корректность, если оно правильное - делаем 1
+          // чтобы при сумме дальше оно учлось, иначе 0
+          const lastWordCorrect = state.userInput[state.currentWordIndex].every(
+            (letter) => letter === "valid"
+          )
+            ? 1
+            : 0;
+          state.correctWords += lastWordCorrect;
+
+          const elapsedTimeInMinutes = (Date.now() - state.startTime) / 60000;
+          state.wpm = Math.round(state.correctWords / elapsedTimeInMinutes);
+        } else {
+          console.warn("no state start time found to calculate wpm");
+        }
+      });
+    },
     initKeyboard: (settings: GameSettingsType) =>
       set((state) => {
         const generatedText = generateText(settings);
-        state.text = generatedText.map((item) => {
-          return item.split("");
-        });
+        state.text = generatedText.map((item) => item.split(""));
         state.userInput = new Array(generatedText.length).fill([]);
         state.currentWordIndex = 0;
+        state.startTime = null;
+        state.correctWords = 0;
+        state.wpm = 0;
+        state.gameEnd = false;
       }),
   }))
 );

@@ -8,8 +8,13 @@ export type KeyboardStoreType = {
   userInput: Array<LetterStatus[]>;
   currentWordIndex: number;
   currentLetterIndex: number;
+  startTime: number | null;
+  correctWords: number;
+  wpm: number;
+  gameEnd: boolean;
   checkLetter: (letter: string, wordIndex: number, letterIndex: number) => void;
   goToNextWord: () => void;
   initKeyboard: (settings: GameSettingsType) => void;
   removeLetter: () => void;
+  calculateWPM: () => void;
 };
