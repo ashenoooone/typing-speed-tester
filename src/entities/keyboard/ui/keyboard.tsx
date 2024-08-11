@@ -103,7 +103,7 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
           );
         })}
       </div>
-      <KeyboardModal isOpen={true} onClose={handleCloseModal} />
+      <KeyboardModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 });
