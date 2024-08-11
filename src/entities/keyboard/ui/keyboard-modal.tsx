@@ -3,7 +3,6 @@ import { Typography } from "@/shared/ui/typography";
 import { cn } from "@/shared/utils";
 import React, { useEffect, useMemo } from "react";
 import { keyboardStore } from "../model/keyboard.store";
-import { Dot } from "@/shared/ui/dot";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { KeyboardChart } from "./keyboard-chart";
 
@@ -12,7 +11,7 @@ type KeyboardModalProps = {
 } & ModalProps;
 
 export const KeyboardModal = React.memo((props: KeyboardModalProps) => {
-  const { className, children, isOpen, onClose } = props;
+  const { className, isOpen, onClose } = props;
 
   //   результаты игры
   const correctWords = keyboardStore.use.correctWords();

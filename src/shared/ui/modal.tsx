@@ -90,13 +90,15 @@ export const Modal = (props: ModalProps) => {
           onClick={onContentClick}
         >
           {children}
-          <Button
-            onClick={onOverlayClick}
-            className="absolute right-3 top-3"
-            variant={"icon"}
-          >
-            <X />
-          </Button>
+          {isOpen && (
+            <Button
+              onClick={onOverlayClick}
+              className="absolute right-3 top-3"
+              variant={"icon"}
+            >
+              <X />
+            </Button>
+          )}
         </Box>
       </div>
     </Portal>

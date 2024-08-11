@@ -83,10 +83,18 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
             state.userInput[state.currentWordIndex - 1][
               state.userInput[state.currentWordIndex - 1].length - 1
             ];
-          if (letterStatus === "invalid") {
+          // прошлая буква неправильная
+          const isInvalid = letterStatus === "invalid";
+          // прошлая буква лишняя
+          const isExtra = letterStatus === "extra";
+          // прошлое слово незакончено
+          const notFullWord =
+            state.text[state.currentWordIndex - 1].length !==
+            state.userInput[state.currentWordIndex - 1].length;
+          if (isInvalid || isExtra || notFullWord) {
             state.currentWordIndex -= 1;
             state.currentLetterIndex =
-              state.text[state.currentWordIndex].length;
+              state.userInput[state.currentWordIndex].length;
           }
         }
       }),
@@ -115,6 +123,7 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
         state.text = generatedText.map((item) => item.split(""));
         state.userInput = new Array(generatedText.length).fill([]);
         state.currentWordIndex = 0;
+        state.currentLetterIndex = 0;
         state.startTime = null;
         state.correctWords = 0;
         state.wpm = 0;

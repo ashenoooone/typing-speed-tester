@@ -14,9 +14,6 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
   const { className } = props;
   // для модалки
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
 
   // настройки игры
   const wordsPerGame = controlPanelStore.use.wordsPerGame();
@@ -34,6 +31,16 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
   const currentWordIndex = keyboardStore.use.currentWordIndex();
   const currentLetterIndex = keyboardStore.use.currentLetterIndex();
   const gameEnd = keyboardStore.use.gameEnd();
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    initKeyboard({
+      currentGameMode,
+      modificators,
+      timePerGame,
+      wordsPerGame,
+    });
+  }, [initKeyboard, modificators, wordsPerGame]);
 
   useEffect(() => {
     initKeyboard({
@@ -56,7 +63,10 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
       if (isModalOpen) {
         return;
       }
-      if (event.key === " ") {
+      if (
+        event.key === " " &&
+        (currentWordIndex > 0 || currentLetterIndex > 0)
+      ) {
         goToNextWord();
       } else if (
         isCyrrilic(event.key) ||

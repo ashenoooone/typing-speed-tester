@@ -37,11 +37,25 @@ export const Button = memo((props: ButtonProps) => {
     children,
     type = "button",
     variant = "default",
+    tabIndex = -1,
+    onClick,
     ...rest
   } = props;
+
+  const onMouseClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      onClick(event);
+    }
+    // сейчас это надо чтобы игра корректно начиналась после нажатий кнопок, потом просто переделать
+    // кнопки на чекбоксы
+    event.currentTarget.blur();
+  };
+
   return (
     <button
       type={type}
+      onClick={onMouseClick}
+      tabIndex={tabIndex}
       className={cn(buttonVariants({ variant }), className)}
       {...rest}
     >
