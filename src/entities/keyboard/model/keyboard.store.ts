@@ -38,6 +38,7 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
     },
     removeLetter: () =>
       set((state) => {
+        // тут рассматриваем 2 кейса, если индекс больше 0, то мы просто удаляем букву
         if (state.currentLetterIndex > 0) {
           const removedLetterStatus =
             state.userInput[state.currentWordIndex].pop();
@@ -45,6 +46,21 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
             state.text[state.currentWordIndex].pop();
           }
           state.currentLetterIndex -= 1;
+        } else if (
+          state.currentLetterIndex === 0 &&
+          state.currentWordIndex > 0
+        ) {
+          // если у нас индекс 0, и при этом последняя буква в прошлом слове неправильная,
+          //  то даем возможность вернуться
+          const letterStatus =
+            state.userInput[state.currentWordIndex - 1][
+              state.userInput[state.currentWordIndex - 1].length - 1
+            ];
+          if (letterStatus === "invalid") {
+            state.currentWordIndex -= 1;
+            state.currentLetterIndex =
+              state.text[state.currentWordIndex].length;
+          }
         }
       }),
     initKeyboard: (settings: GameSettingsType) =>
