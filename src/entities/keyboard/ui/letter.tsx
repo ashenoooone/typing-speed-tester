@@ -15,12 +15,12 @@ export const Letter = React.memo((props: LetterProps) => {
   return (
     <Typography
       variant={"h5"}
-      className={cn("", className, {
+      className={cn("font-medium", className, {
         "text-text-primary/40": status === "default",
         "text-text-error/50": status === "extra",
         "text-text-error": status === "invalid",
-        "text-text-success": status === "valid",
-        "border-l-2 border-state-success-focused": isActive,
+        "text-text-primary": status === "valid",
+        "border-l-2 border-text-text-primary": isActive,
       })}
     >
       {letter}

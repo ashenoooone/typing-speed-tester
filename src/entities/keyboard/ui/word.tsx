@@ -19,7 +19,7 @@ export const Word = React.memo((props: WordProps) => {
   return (
     <div
       className={cn("flex", className, {
-        "border-r-2 border-state-success-focused":
+        "border-r-2 border-text-text-primary":
           // проверка, что мы вышли за границы слова, то нужно передвигать маркер курсора
           currentWordIndex === wordIndex &&
           currentLetterIndex === text[currentWordIndex].length,
