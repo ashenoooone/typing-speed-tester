@@ -14,6 +14,7 @@ type ControlPanelProps = {
 };
 
 export const ControlPanel = React.memo((props: ControlPanelProps) => {
+  // компонент - контрольная панель для приложения с настройками
   const { className } = props;
 
   return (

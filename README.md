@@ -1,50 +1,36 @@
-# React + TypeScript + Vite
+# Тестовое задание: Тренажер скорости набора текста
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание
 
-Currently, two official plugins are available:
+Данный проект представляет собой тренажер скорости набора текста, который реализован с использованием современного стека технологий. В тренажере реализованы два режима работы и два модификатора, которые позволяют гибко настраивать условия тренировки.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Режимы тренажера
 
-## Expanding the ESLint configuration
+- **Режим на время:** Пользователь вводит текст в течение заданного времени.
+- **Режим на количество слов:** Пользователь вводит определенное количество слов.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Модификаторы
 
-- Configure the top-level `parserOptions` property like this:
+- **Знаки пунктуации:** В текст могут быть добавлены знаки препинания.
+- **Числа:** В текст могут быть добавлены числа.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Основные технологии
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **State Manager:** Zustand
+- **CSS:** Tailwind CSS
+- **Сборка проекта:** Vite
+- **Графики:** Recharts
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Функциональность
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **Отображение символов:** В процессе игры отображаются правильные, неправильные и лишние символы.
+- **Статистика:** После завершения игры показываются WPM (слов в минуту) и подробная статистика по введенным данным.
+- **Несколько режимов сложности:** Игрок может выбирать разные режимы сложности игры
+
+## Скриншоты
+
+- ![Главное окно](./_images/1.png)
+- ![Режим на время](./_images/2.png)
+- ![Режим с пунктуацией](./_images/3.png)
+- ![Два режима сразу](./_images/4.png)
+- ![Статистика по завершении](./_images/5.png)
