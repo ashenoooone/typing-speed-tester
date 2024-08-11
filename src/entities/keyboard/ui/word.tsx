@@ -12,14 +12,29 @@ type WordProps = {
 export const Word = React.memo((props: WordProps) => {
   const { className, word, wordIndex } = props;
   const userInput = keyboardStore.use.userInput();
+  const currentWordIndex = keyboardStore.use.currentWordIndex();
+  const currentLetterIndex = keyboardStore.use.currentLetterIndex();
+  const text = keyboardStore.use.text();
 
   return (
-    <div className={cn("flex", className)}>
+    <div
+      className={cn("flex", className, {
+        "border-r-2 border-state-success-focused":
+          // проверка, что мы вышли за границы слова, то нужно передвигать маркер курсора
+          currentWordIndex === wordIndex &&
+          currentLetterIndex === text[currentWordIndex].length,
+      })}
+    >
       {word.map((letter, letterIndex) => {
         return (
           <Letter
+            isActive={
+              // если мы находимся в текущем слове и индексы равны, то буква активная (маркер на ней находится)
+              currentWordIndex === wordIndex &&
+              currentLetterIndex === letterIndex
+            }
             status={userInput?.[wordIndex]?.[letterIndex] ?? "default"}
-            key={letter}
+            key={`${word.join("")}${letterIndex}${letter}`}
             letter={letter}
           />
         );

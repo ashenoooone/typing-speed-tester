@@ -7,10 +7,11 @@ type LetterProps = {
   className?: string;
   letter: string;
   status?: LetterStatus;
+  isActive?: boolean;
 };
 
 export const Letter = React.memo((props: LetterProps) => {
-  const { className, letter, status = "default" } = props;
+  const { className, letter, status = "default", isActive } = props;
   return (
     <Typography
       variant={"h5"}
@@ -19,6 +20,7 @@ export const Letter = React.memo((props: LetterProps) => {
         "text-text-error/50": status === "extra",
         "text-text-error": status === "invalid",
         "text-text-success": status === "valid",
+        "border-l-2 border-state-success-focused": isActive,
       })}
     >
       {letter}

@@ -6,7 +6,10 @@ export type LetterStatus = "valid" | "invalid" | "extra" | "default";
 export type KeyboardStoreType = {
   text: Array<string[]>;
   userInput: Array<LetterStatus[]>;
-  addLetter: (letter: string, wordIndex: number, letterIndex: number) => void;
-  addWord: () => void;
+  currentWordIndex: number;
+  currentLetterIndex: number;
+  checkLetter: (letter: string, wordIndex: number, letterIndex: number) => void;
+  goToNextWord: () => void;
   initKeyboard: (settings: GameSettingsType) => void;
+  removeLetter: () => void;
 };
