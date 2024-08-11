@@ -97,6 +97,8 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
       currentWordIndex,
       goToNextWord,
       isModalOpen,
+      currentGameMode,
+      timePerGame,
     ]
   );
 
