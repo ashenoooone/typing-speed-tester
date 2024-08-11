@@ -1,7 +1,11 @@
 import { createStore } from "zustand";
 import { KeyboardStoreType } from "./types";
 import { generateText } from "./get-text";
-import { GameSettingsType } from "@/entities/control-panel";
+import {
+  GameModeType,
+  GameSettingsType,
+  TimePerGame,
+} from "@/entities/control-panel";
 import { immer } from "zustand/middleware/immer";
 import { createSelectors } from "@/shared/utils";
 
@@ -15,10 +19,24 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
     correctWords: 0,
     wpm: 0,
     gameEnd: false,
+    _currentTimer: null,
+
+    setStartTime: (startTime: number) => {
+      set((state) => {
+        state.startTime = startTime;
+      });
+    },
+
+    setGameEnd: (gameEnd: boolean) => {
+      set((state) => {
+        state.gameEnd = gameEnd;
+      });
+    },
     checkLetter: (letter: string, wordIndex: number, letterIndex: number) => {
       set((state) => {
+        // по хорошему логику по старту отсчета времени и тд выделить в функцию
         if (state.startTime === null) {
-          state.startTime = Date.now(); // Record start time on first key press
+          state.startTime = Date.now();
         }
 
         if (state.text[wordIndex].length <= letterIndex) {
@@ -128,6 +146,7 @@ const keyboardStoreBase = createStore<KeyboardStoreType>()(
         state.correctWords = 0;
         state.wpm = 0;
         state.gameEnd = false;
+        state._currentTimer = null;
       }),
   }))
 );

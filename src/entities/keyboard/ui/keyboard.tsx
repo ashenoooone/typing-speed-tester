@@ -1,10 +1,10 @@
 import { controlPanelStore } from "@/entities/control-panel";
 import { cn, isCyrrilic, isNumeric, isPunctual } from "@/shared/utils";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { keyboardStore } from "../model/keyboard.store";
 import { Word } from "./word";
-import { Modal } from "@/shared/ui/modal";
 import { KeyboardModal } from "./keyboard-modal";
+import { KeyboardTimer } from "./keyboard-timer";
 
 type KeyboardProps = {
   className?: string;
@@ -12,8 +12,11 @@ type KeyboardProps = {
 
 export const Keyboard = React.memo((props: KeyboardProps) => {
   const { className } = props;
+
   // для модалки
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // таймаут реф на случай если у нас режим игры на время
+  const refSetTimeout = useRef<NodeJS.Timeout | null>();
 
   // настройки игры
   const wordsPerGame = controlPanelStore.use.wordsPerGame();
@@ -21,11 +24,12 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
   const modificators = controlPanelStore.use.modificators();
   const currentGameMode = controlPanelStore.use.currentGameMode();
   // управление клавиатурой
+  const startTime = keyboardStore.use.startTime();
   const initKeyboard = keyboardStore.use.initKeyboard();
   const checkLetter = keyboardStore.use.checkLetter();
   const goToNextWord = keyboardStore.use.goToNextWord();
   const removeLetter = keyboardStore.use.removeLetter();
-  const calculateWPM = keyboardStore.use.calculateWPM();
+  const setEndGame = keyboardStore.use.setGameEnd();
   // клавиатура
   const text = keyboardStore.use.text();
   const currentWordIndex = keyboardStore.use.currentWordIndex();
@@ -40,7 +44,7 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
       timePerGame,
       wordsPerGame,
     });
-  }, [initKeyboard, modificators, wordsPerGame]);
+  }, [initKeyboard, currentGameMode, modificators, wordsPerGame]);
 
   useEffect(() => {
     initKeyboard({
@@ -49,13 +53,13 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
       timePerGame,
       wordsPerGame,
     });
-  }, [initKeyboard, modificators, wordsPerGame]);
+  }, [initKeyboard, currentGameMode, modificators, wordsPerGame]);
 
   useEffect(() => {
     if (gameEnd) {
       setIsModalOpen(true);
     }
-  }, [calculateWPM, gameEnd]);
+  }, [gameEnd]);
 
   const handleKeydown = useCallback(
     (event: KeyboardEvent) => {
@@ -73,7 +77,15 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
         isPunctual(event.key) ||
         isNumeric(event.key)
       ) {
+        // если у нас нет стартового времени - значит игра еще не началась, значит мы выставляем таймаут
+        if (!startTime && currentGameMode === "time") {
+          // через timePerGame * 1000 секунд завершаем игру
+          refSetTimeout.current = setTimeout(() => {
+            setEndGame(true);
+          }, timePerGame * 1000);
+        }
         checkLetter(event.key, currentWordIndex, currentLetterIndex);
+        // сделать проверку, если игра еще не началась, то начать отсчет таймера после первой буквы
       } else if (event.key === "Backspace") {
         removeLetter();
       }
@@ -114,6 +126,7 @@ export const Keyboard = React.memo((props: KeyboardProps) => {
         })}
       </div>
       <KeyboardModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      {currentGameMode === "time" && startTime && <KeyboardTimer />}
     </div>
   );
 });

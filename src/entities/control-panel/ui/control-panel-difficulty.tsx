@@ -28,7 +28,7 @@ const times: Record<
   "45": {
     activeClassName: "text-orange/60",
   },
-  "130": {
+  "60": {
     activeClassName: "text-orange",
     activeIcon: <img className="w-8 h-8" src={skullPng} />,
     defaultIcon: <img className="w-8 h-8" src={skullAnimated} />,

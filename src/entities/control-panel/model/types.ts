@@ -1,5 +1,5 @@
 export type WordsPerGame = 15 | 25 | 50 | 130;
-export type TimePerGame = 15 | 30 | 45 | 130;
+export type TimePerGame = 15 | 30 | 45 | 60;
 export type GameModeType = "time" | "words";
 export type GameModificators = "punctuation" | "numbers";
 

@@ -7,8 +7,13 @@ const PUNCTUATIONS = [".", ",", "!", "?", ";", ":"];
 export const generateText = (settings: GameSettingsType): string[] => {
   const { wordsPerGame } = settings;
 
+  let elements;
   // Получаем случайные слова
-  const elements = getRandomElements(WORDS, wordsPerGame);
+  if (settings.currentGameMode === "words") {
+    elements = getRandomElements(WORDS, wordsPerGame);
+  } else {
+    elements = getRandomElements(WORDS, 160);
+  }
   const numberIndexes = new Set<number>();
   const punctuationIndexes = new Set<number>();
 
